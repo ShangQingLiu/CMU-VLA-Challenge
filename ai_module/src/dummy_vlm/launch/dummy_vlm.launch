@@ -1,9 +1,78 @@
-<launch>
+<!-- <launch>
+  <arg name="venv" value="/opt/conda/envs/TAMSxGalbot/bin/python3" />
+  <node pkg="dummy_vlm" type="run.py" name="vlm" output="screen" launch-prefix = "$(arg venv)" cwd="node"/>
+</launch> -->
 
-  <node pkg="dummy_vlm" type="dummyVLM" name="dummyVLM" output="screen" required="true">
-    <param name="waypoint_file_dir" type="string" value="$(find dummy_vlm)/data/waypoints.ply" />
-    <param name="object_list_file_dir" type="string" value="$(find dummy_vlm)/data/object_list.txt" />
-    <param name="waypointReachDis" type="double" value="1.0" />
+<launch>
+  <!-- <node pkg="nodelet" type="nodelet" name="pcl2scan"
+      args="standalone pointcloud_to_laserscan/pointcloud_to_laserscan_nodelet" output="screen">
+    <remap from="cloud"    to="/sensor_scan"/>
+    <remap from="cloud_in" to="/sensor_scan"/>
+    <remap from="scan"     to="/scan"/>
+    <param name="target_frame" value="sensor_at_scan"/>
+    <param name="min_height"   value="0.05"/>
+    <param name="max_height"   value="1.5"/>
+    <param name="range_min"    value="0.1"/>
+    <param name="range_max"    value="10.0"/>
   </node>
+
+  <node pkg="gmapping" type="slam_gmapping" name="gmapping_node" output="log">
+      <param name="base_frame"            value="vehicle"/>
+      <param name="odom_frame"            value="odom" />
+      <param name="map_update_interval"   value="1.5"/>
+      <param name="maxUrange"             value="15.0"/>
+      <param name="delta"                 value="0.03" />
+      <param name="xmin"                  value="-10" />
+      <param name="ymin"                  value="-10" />
+      <param name="xmax"                  value="10" />
+      <param name="ymax"                  value="10" />
+  </node> -->
+
+  <!-- Path planning -->
+    <!-- <group ns="mb">
+      <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen"> 
+          <env name="ROSCONSOLE_CONFIG_FILE" value="$(find dummy_vlm)/config/rosconsole_move_base.config"/>
+
+          <rosparam file="$(find dummy_vlm)/config/move_base.yaml" command="load" />
+          <rosparam file="$(find dummy_vlm)/config/costmap_common.yaml" command="load" ns="global_costmap" />
+          <rosparam file="$(find dummy_vlm)/config/costmap_common.yaml" command="load" ns="local_costmap" />
+          <rosparam file="$(find dummy_vlm)/config/costmap_global.yaml" command="load" />
+          <rosparam file="$(find dummy_vlm)/config/costmap_local.yaml" command="load" />
+          <rosparam file="$(find dummy_vlm)/config/planner_global.yaml" command="load" />
+          <rosparam file="$(find dummy_vlm)/config/planner_local.yaml" command="load" />
+      </node>
+    </group> -->
+
+
+  <!-- Explore -->
+  <!-- <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="screen">
+      <rosparam file="$(find dummy_vlm)/config/exploration.yaml" command="load" />
+      <remap from="/move_base" to="/mb/move_base"/>
+  </node> -->
+
+
+  
+
+  
+  <!-- Explore bk -->
+  <!-- <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="screen">
+      <rosparam file="$(find dummy_vlm)/config/exploration.yaml" command="load" />
+      <remap from="move_base" to="/mb/move_base"/>
+       <remap from="move_base/goal"     to="/mb/move_base/goal"/>
+  </node> -->
+
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom_temp"
+      args="0 0 0 0 0 0 map odom"/> -->
+
+  <!-- <include file="$(find language_planner)/launch/sort3d_ros.launch" /> -->
+  <arg name="venv" value="/dataSSD/1sliu/miniconda3/envs/TAMSxGalbot/bin/python3" />
+  <node pkg="dummy_vlm" type="run.py" name="vlm" output="screen" launch-prefix = "$(arg venv)" cwd="node"/>
+
+  <!-- Semantic mapper -->
+  <!-- <node pkg="semantic" type="system_ros1.py" respawn="true" name="semantic" launch-prefix = "$(arg venv)" output="screen">
+      <rosparam file="$(find semantic)/src/config/mapping_wheelchair.yaml" command="load" />
+  </node> -->
+
+
 
 </launch>

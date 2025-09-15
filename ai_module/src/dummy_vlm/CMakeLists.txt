@@ -11,7 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   sensor_msgs
+  message_generation
 )
+
 
 ###################################
 ## catkin specific configuration ##
@@ -19,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 catkin_package(
   CATKIN_DEPENDS
+  message_runtime
   roscpp
   std_msgs
   sensor_msgs
@@ -60,4 +63,9 @@ install(DIRECTORY launch/
 )
 install(DIRECTORY data/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/data
+)
+
+catkin_install_python(PROGRAMS
+  src/navid_ws/NaVid-VLN-CE/run.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

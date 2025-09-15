@@ -1,0 +1,76 @@
+# # 只用 TrajectoryPlannerROS（不要同时加载 DWA 的 yaml）
+# base_local_planner: base_local_planner/TrajectoryPlannerROS
+
+# TrajectoryPlannerROS:
+#   # 机器人运动学（差速）
+#   holonomic_robot: false
+
+#   # 速度上限（先保守，再慢慢放开）
+#   max_vel_x: 0.25          # 线速度上限 m/s（你的 0.3 有点激进）
+#   min_vel_x: 0.0           # 允许几乎停下
+#   max_vel_theta: 0.8       # 角速度上限 rad/s
+#   min_in_place_vel_theta: 0.4
+
+#   # 加速度限制（越小越稳）
+#   acc_lim_x: 0.5           # m/s^2
+#   acc_lim_theta: 1.0       # rad/s^2
+
+#   # 轨迹采样/前瞻
+#   sim_time: 1.5
+#   sim_granularity: 0.025
+#   angular_sim_granularity: 0.025
+#   vx_samples: 8
+#   vtheta_samples: 20
+
+#   # 评分（TrajPlanner 用的是 pdist/gdist/occdist）
+#   meter_scoring: true
+#   pdist_scale: 0.6         # 路径跟随权重（越大越“贴路径”）
+#   gdist_scale: 0.8         # 朝目标靠拢权重
+#   occdist_scale: 0.02      # 障碍代价权重（太大容易保守不动）
+
+#   # 到达容差
+#   xy_goal_tolerance: 0.15
+#   yaw_goal_tolerance: 0.25
+#   latch_xy_goal_tolerance: true
+
+#   # 逃逸（卡住时允许轻微后退）
+#   escape_vel: -0.1
+    
+
+
+# 只用 DWA（不要再加载 TrajectoryPlanner 的 yaml）
+DWAPlannerROS:
+  # 差速底盘：不横移、不强制倒车
+  min_vel_x: 0.0
+  max_vel_x: 0.25          # 线速度上限（m/s），先保守
+  max_vel_y: 0.0
+
+  # 角速度限制
+  max_vel_theta: 0.8       # rad/s
+  min_vel_theta: -0.8
+
+  # 加速度限制（越小越稳）
+  acc_lim_x: 0.5           # m/s^2
+  acc_lim_theta: 1.0       # rad/s^2
+
+  # 轨迹仿真 & 采样
+  sim_time: 1.5
+  vx_samples: 8
+  vtheta_samples: 20
+  sim_granularity: 0.025
+  angular_sim_granularity: 0.025
+
+  # 评分（路径/目标/障碍）
+  path_distance_bias: 20.0
+  goal_distance_bias: 15.0
+  occdist_scale: 0.02
+
+  # 到达容差（别太苛刻）
+  xy_goal_tolerance: 0.15
+  yaw_goal_tolerance: 0.25
+  latch_xy_goal_tolerance: true
+
+  # 其它
+  stop_time_buffer: 0.2
+  forward_point_distance: 0.325
+  prune_plan: true

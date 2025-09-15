@@ -1,0 +1,46 @@
+# # Reff: http://wiki.ros.org/move_base
+# recovery_behavior_enabled: true
+
+# controller_frequency: 10.0
+# controller_patience: 10.0
+# planner_frequency: 5.0
+# planner_patience: 5.0
+
+# conservative_reset_dist: 6.0
+# oscillation_timeout: 10.0
+# oscillation_distance: 0.15
+
+
+
+# # 全局/通用
+# recovery_behavior_enabled: true
+# controller_frequency: 10.0
+# controller_patience: 10.0
+# planner_frequency: 5.0
+# planner_patience: 5.0
+# conservative_reset_dist: 6.0
+# oscillation_timeout: 10.0
+# oscillation_distance: 0.15
+
+# # 选择的规划器（DWA + Navfn；若你用 TrajectoryPlanner 就改成 trajectory_planner/TrajectoryPlannerROS）
+# base_global_planner: navfn/NavfnROS
+# base_local_planner:  dwa_local_planner/DWAPlannerROS
+
+
+
+
+
+
+# 全局/通用
+recovery_behavior_enabled: true
+controller_frequency: 10.0
+controller_patience: 10.0
+planner_frequency: 1.0         # 5.0 太勤快了，先保守为 1Hz
+planner_patience: 5.0
+conservative_reset_dist: 6.0
+oscillation_timeout: 10.0
+oscillation_distance: 0.15
+
+# 规划器选择（只启用 DWA + Navfn）
+base_global_planner: navfn/NavfnROS
+base_local_planner: dwa_local_planner/DWAPlannerROS

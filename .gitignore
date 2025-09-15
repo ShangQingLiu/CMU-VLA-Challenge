@@ -1,11 +1,34 @@
 system/unity/src/vehicle_simulator/log/
 system/unity/src/vehicle_simulator/mesh/
+
+# ROS build related
 ai_module/build/
 ai_module/devel/
+ai_module/logs/
+ai_module/.catkin_tools/
 system/unity/build/
 system/unity/devel/
+system/unity/.catkin_tools/
+
+
 **/.vscode/**
 **/__pycache__/**
 .catkin_workspace
 *.pkl
 *.pth
+*.log
+*.catkin_tools
+
+
+
+# External modules
+ai_module/src/m-explore/
+ai_module/src/pointcloud_to_laserscan-lunar-devel/
+ai_module/src/semantic/
+ai_module/src/SORT3D/
+ai_module/src/dummy_vlm/src/bag
+*.zip
+
+CMU-VLA-Challenge/ai_module/src/dummy_vlm/src/navid_ws/habitat-lab
+
+docker_bk/
