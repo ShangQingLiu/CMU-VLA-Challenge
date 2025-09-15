@@ -73,7 +73,7 @@ rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-### 6. Alter Load Model PATH 
+### 6. Download Model and Alter Model PATH 
 Download model pth from Google Drive link in **Additional Notes or Instructions** in submission form.
 Place them under `ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/model_zoo/`
 Reference to `model_zoo_structure.docx` in the Google Drive 
