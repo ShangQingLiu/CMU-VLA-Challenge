@@ -1,5 +1,107 @@
+
+
+
+
+
+
 # CMU-VLA-Challenge
 
+## Submission TAMSxGalbot
+### Env Setup
+Note: Use Ubuntu 20.04 (Focal) with ROS Noetic.
+To begin with you would need to prepare conda, if you already have you can skip it.
+- Miniconda
+wget -O /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash /tmp/miniconda.sh -b -p $HOME/miniconda
+rm /tmp/miniconda.sh
+source "$HOME/miniconda/etc/profile.d/conda.sh"
+
+next
+- Clone the repo
+git clone https://github.com/ShangQingLiu/CMU-VLA-Challenge.git
+cd CMU-VLA-Challenge
+
+then 
+- Conda Env Create (TAMSxGalbot)
+cd ai_module/
+conda env create -f environment.yml
+
+- external module install
+cd pkgs/
+1. Install Habitat 
+git clone --branch v0.1.7 git@github.com:facebookresearch/habitat-lab.git 
+or
+git clone --branch v0.1.7 https://github.com/facebookresearch/habitat-lab.git
+
+cd habitat-lab
+//installs both habitat and habitat_baselines
+python -m pip install -r requirements.txt
+python -m pip install -r habitat_baselines/rl/requirements.txt
+python -m pip install -r habitat_baselines/rl/ddppo/requirements.txt
+python setup.py develop --all
+
+cd ..
+2. Install LLaVa 
+git clone https://github.com/haotian-liu/LLaVA
+git checkout tags/v1.2.2.post1
+pip install -e .
+
+- update specific package for weired error
+pip install transformers==4.31.0
+
+- ROS related module install
+
+
+### Alter Load Model PATH 
+
+Download model pth from Google Drive link in "Additional Notes or Instructions" in submission form.
+Place them under "ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/model_zoo/"
+
+
+### Build Environment (ROS)
+
+From project ROOT:
+source /opt/ros/noetic/setup.bash 
+cd system/unity
+
+catkin build -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+or 
+catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+
+cd ../..
+cd ai_module
+
+catkin build -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+or 
+catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+
+//echo in bashrc
+`
+source /opt/ros/noetic/setup.bash
+source system/unity/devel/setup.bash
+source aimodule/devel/setup.bash
+
+export DISABLE_ROS1_EOL_WARNINGS=1
+`
+
+### Export Key
+OPENAI_KEY reference in the "Additional Notes or Instructions" in submission form.
+
+### Runtime
+#### (Terminal 1) System Up
+cd Project ROOT
+./launch_system.sh
+#### (Termianl 2) (You need to change) Publish Official Question Instruction Topic Message
+example: 
+rostopic pub -r 1 /challenge_question std_msgs/String "data: 'How many red pillows are on the sofa?'"
+
+
+#### (Termianl 3) AI module Up
+cd Project ROOT
+./launch_module.sh
+
+
+--- Original README.md
 ## Table of Contents
 [Introduction](#introduction)  
 [Objective](#objective)  
