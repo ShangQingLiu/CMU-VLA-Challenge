@@ -1,66 +1,87 @@
-
-
-
-
-
-
 # CMU-VLA-Challenge
 
 ## Submission TAMSxGalbot
-### Env Setup
-Note: Use Ubuntu 20.04 (Focal) with ROS Noetic.
-To begin with you would need to prepare conda, if you already have you can skip it.
-- Miniconda
+
+---
+
+### Environment Setup
+> **Note:** Use **Ubuntu 20.04 (Focal)** with **ROS Noetic**.    
+
+### 1. Install Conda (skip if already installed).    
+
+```bash
 wget -O /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash /tmp/miniconda.sh -b -p $HOME/miniconda
 rm /tmp/miniconda.sh
 source "$HOME/miniconda/etc/profile.d/conda.sh"
+```
 
-next
-- Clone the repo
+### 2. Clone the repository
+```bash
 git clone https://github.com/ShangQingLiu/CMU-VLA-Challenge.git
 cd CMU-VLA-Challenge
+```
 
-then 
-- Conda Env Create (TAMSxGalbot)
+### 3. Create Conda Environment (TAMSxGalbot)
+```bash
 cd ai_module/
 conda env create -f environment.yml
+```
 
-- external module install
-cd pkgs/
-1. Install Habitat 
+### 4. Create folder for external module build
+```bash
+cd ..
+mkdir pkgs/
+cd pkgs
+```
+
+### 5. Install External Modules
+##### (a) Habitat 
+```bash
 git clone --branch v0.1.7 git@github.com:facebookresearch/habitat-lab.git 
-or
+/* or */
 git clone --branch v0.1.7 https://github.com/facebookresearch/habitat-lab.git
-
 cd habitat-lab
-//installs both habitat and habitat_baselines
+
+/* installs both habitat and habitat_baselines */
 python -m pip install -r requirements.txt
-python -m pip install -r habitat_baselines/rl/requirements.txt
+python -m pip install -r habitat_baselines/rl/requirements.txt /* Ignore No matching error */
 python -m pip install -r habitat_baselines/rl/ddppo/requirements.txt
 python setup.py develop --all
-
 cd ..
-2. Install LLaVa 
+```
+
+##### (b) LLaVA 
+```bash
 git clone https://github.com/haotian-liu/LLaVA
+cd LLaVA
 git checkout tags/v1.2.2.post1
 pip install -e .
+cd ..
+```
 
-- update specific package for weired error
-pip install transformers==4.31.0
+##### (c) Update specific package for weired error
+```bash
+pip install transformers==4.31.0  /* Ignore incompatible issue */
+```
 
-- ROS related module install
+##### (d) ROS related module install
+Back to Project Root:
+```bash
+cd ai_module/
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+### 6. Alter Load Model PATH 
+Download model pth from Google Drive link in **Additional Notes or Instructions** in submission form.
+Place them under `ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/model_zoo/`
+Reference to `model_zoo_structure.docx` in the Google Drive 
 
 
-### Alter Load Model PATH 
-
-Download model pth from Google Drive link in "Additional Notes or Instructions" in submission form.
-Place them under "ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/model_zoo/"
-
-
-### Build Environment (ROS)
-
+### 7. Build Environment (ROS)
 From project ROOT:
+```bash
 source /opt/ros/noetic/setup.bash 
 cd system/unity
 
@@ -74,31 +95,37 @@ cd ai_module
 catkin build -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 or 
 catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+```
 
-//echo in bashrc
-`
+Add to `~/.bashrc`
+```bash
 source /opt/ros/noetic/setup.bash
-source system/unity/devel/setup.bash
-source aimodule/devel/setup.bash
+source CMU-VLA-Challenge/system/unity/devel/setup.bash
+source CMU-VLA-Challenge/ai_module/devel/setup.bash
 
-export DISABLE_ROS1_EOL_WARNINGS=1
-`
+export DISABLE_ROS1_EOL_WARNINGS = 1
+```
 
-### Export Key
-OPENAI_KEY reference in the "Additional Notes or Instructions" in submission form.
+### 8. Export Key
+OPENAI_API_KEY reference in the **Additional Notes or Instructions** in submission form.
 
-### Runtime
-#### (Terminal 1) System Up
-cd Project ROOT
+### 9. Runtime
+##### Terminal 1 - System Up
+Back to Project ROOT
+```bash
 ./launch_system.sh
-#### (Termianl 2) (You need to change) Publish Official Question Instruction Topic Message
-example: 
+```
+##### Termianl 2 - (You need to change) Publish Official Question Instruction Topic Message
+```bash
+/* example */
 rostopic pub -r 1 /challenge_question std_msgs/String "data: 'How many red pillows are on the sofa?'"
+```
 
-
-#### (Termianl 3) AI module Up
-cd Project ROOT
+##### Termianl 3 - AI module Up
+Back to Project ROOT
+```bash
 ./launch_module.sh
+```
 
 
 --- Original README.md
