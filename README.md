@@ -63,6 +63,8 @@ cd ..
 ##### (c) Update specific package for weired error
 ```bash
 pip install transformers==4.31.0  /* Ignore incompatible issue */
+pip install protobuf
+pip install webdataset==0.1.103
 ```
 
 ##### (d) ROS related module install

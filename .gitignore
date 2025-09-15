@@ -32,3 +32,6 @@ ai_module/src/dummy_vlm/src/bag
 CMU-VLA-Challenge/ai_module/src/dummy_vlm/src/navid_ws/habitat-lab
 
 docker_bk/
+
+pkgs/
+system/unity/logs/
