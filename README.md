@@ -5,7 +5,125 @@
 ---
 
 ### Environment Setup
-> **Note:** Use **Ubuntu 20.04 (Focal)** with **ROS Noetic**.    
+> **Note:** Use **Ubuntu 20.04 (Focal)** with **ROS Noetic**.      
+> **Requirement: RAM > 72GB**.  
+
+### Tips  -  You can set up the environment in either of the following two ways: A or B.
+
+## A. Docker Version
+### 1. Download the source code in this repository
+
+### 2. Open terminal #1   
+```bash
+docker pull haochenz11/ubuntu20_ros:cmu_vla_challenge_simulation
+xhost + 
+newgrp docker   
+``` 
+
+```bash
+docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
+  -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
+  --network=host e4679c07c815
+```
+
+```bash
+/* use sudo if necessary */  
+
+source /opt/ros/noetic/setup.bash   
+cd /home/$USER/CMU-VLA-Challenge/system/unity
+catkin_make   
+chown -R docker:docker build/ devel/ .catkin_workspace
+chmod +rw build/ devel/ .catkin_workspace
+cd /home/$USER/CMU-VLA-Challenge
+./launch_system.sh
+
+/* don't forget to put scenes into 
+CMU-VLA-Challenge/system/unity/src/vehicle_simulator/mesh/unity */
+```
+
+### 2. Open terminal #2  
+```bash
+docker pull osmallfrogo/ubuntu20_ros:cmu_vla_challenge_simulation
+xhost + 
+newgrp docker   
+```
+
+```bash
+docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
+  -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
+  --network=host 153cabb5e039
+```
+
+```bash
+/* use sudo if necessary */  
+
+source /opt/ros/noetic/setup.bash   
+cd CMU-VLA-Challenge/ai_module
+catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+```
+
+```bash
+/* this is an example, and you need to change it. */
+/* publish Official Question Instruction Topic Message */
+
+rostopic pub -r 1 /challenge_question std_msgs/String "data: 'How many red pillows are on the sofa?'"
+```
+
+### 3. Model profiles and the key
+Download model profiles from Goole Drive and put them under `CMU-VLA-Challenge/ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/model_zoo`.
+We have attached the link in the submission form.
+Please organize the structure as described in `model_zoo_structure` in Goole Drive. 
+Note that the names of downloaded profiles maybe different from `model_zoo_structure`, you need to change them as described in `model_zoo_structure`.
+This maybe due to the download mechanism of Goole Drive.
+We found that some files will have suffixes like "-002"".zip" after downloading, which need to be cleared manually.
+In short, please make sure each file name is consistent with that shown in `model_zoo_structure`.
+
+
+Run `vim ~/.bashrc` in terminal #2 and put the `OPENAI_API_KEY` into it.
+We have also uploaded our `OPENAI_API_KEY` in Goole Drive.
+Finally, run `exec bash`.
+
+### 4. Open terminal #3 
+```bash
+xhost + 
+newgrp docker   
+```
+
+```bash
+docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
+  -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
+  --network=host 153cabb5e039
+```
+
+```bash
+/* use sudo if necessary */  
+
+source /opt/ros/noetic/setup.bash   
+cd CMU-VLA-Challenge
+./launch_module.sh
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## B. General Version
 
 ### 1. Install Conda (skip if already installed).    
 
