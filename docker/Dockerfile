@@ -105,4 +105,6 @@ RUN conda run -n TAMSxGalbot pip install transformers==4.31.0
 # Ensure bash always sources conda and activates env
 RUN echo ". /opt/conda/etc/profile.d/conda.sh && conda activate TAMSxGalbot" >> /root/.bashrc
 
+WORKDIR /home
+
 

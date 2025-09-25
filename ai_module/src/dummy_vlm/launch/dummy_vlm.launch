@@ -65,7 +65,7 @@
       args="0 0 0 0 0 0 map odom"/> -->
 
   <!-- <include file="$(find language_planner)/launch/sort3d_ros.launch" /> -->
-  <arg name="venv" value="/dataSSD/1sliu/miniconda3/envs/TAMSxGalbot/bin/python3" />
+  <arg name="venv" value="/opt/conda/envs/TAMSxGalbot/bin/python3" />
   <node pkg="dummy_vlm" type="run.py" name="vlm" output="screen" launch-prefix = "$(arg venv)" cwd="node"/>
 
   <!-- Semantic mapper -->
