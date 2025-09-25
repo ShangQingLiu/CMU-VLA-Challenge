@@ -1,0 +1,10 @@
+name: TAMSxGalbot 
+channels:
+  - aihabitat
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip
+  - habitat-sim=0.1.7=py3.8_headless_linux_856d4b08c1a2632626bf0d205bf46471a99502b7
+  - pip:
+    - -r requirements.txt

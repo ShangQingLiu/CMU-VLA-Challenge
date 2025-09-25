@@ -1,0 +1,45 @@
+fastapi
+gradio==3.35.2
+markdown2[all]
+numpy==1.23.5
+requests
+sentencepiece
+torch==2.0.1
+torchvision==0.15.2
+uvicorn
+shortuuid
+peft==0.4.0
+#transformers==2.4.1 # For compatibility with tokenizers
+#transformers==4.31 # For AutoModelForCausalLM Original Navid using 4.31 
+#transformers==4.28.1 # For AutoModelForCausalLM Original Navid using 4.31 
+transformers==4.31.0 # From here you can have Llava
+accelerate==0.21.0
+bitsandbytes==0.41.0
+scikit-learn==1.2.2
+sentencepiece==0.1.99
+einops==0.6.1
+einops-exts==0.0.4
+timm==0.6.13
+gradio_client==0.2.9
+fairscale
+decord
+absl-py
+braceexpand
+simplejson
+dtw
+fastdtw
+gym==0.17.3
+
+
+# YOLOv8
+ultralytics
+openai
+
+# ROS
+rospkg
+empy
+
+
+
+#Customize install
+# habitat
