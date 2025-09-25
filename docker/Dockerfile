@@ -83,34 +83,26 @@ RUN conda init \
 WORKDIR /home
 RUN git clone --branch v0.1.7 https://github.com/facebookresearch/habitat-lab.git
 
+# habitat-lab
 WORKDIR /home/habitat-lab
-# Remove TF 1.x line so pip won’t try to install it
-
 RUN sed -i '/^tensorflow==1\.13\.1$/d' habitat_baselines/rl/requirements.txt
-RUN conda init \
- && exec bash \
- && conda activate TAMSxGalbot \
- && python -m pip install --upgrade pip \
- && pip install numpy==2.2.0 \ 
- && python -m pip install --no-cache-dir -r habitat_baselines/rl/requirements.txt \
- && python -m pip install --no-cache-dir -r habitat_baselines/rl/ddppo/requirements.txt 
+RUN conda run -n TAMSxGalbot python -m pip install --upgrade pip && \
+    conda run -n TAMSxGalbot pip install -r habitat_baselines/rl/requirements.txt && \
+    conda run -n TAMSxGalbot pip install -r habitat_baselines/rl/ddppo/requirements.txt && \
+    conda run -n TAMSxGalbot python setup.py develop --all
 
-# If setup.py expects to run from repo root, keep WORKDIR here
-#RUN python -m pip install  --use-pep517 -e .
-RUN conda init \
- && exec bash \
- && conda activate TAMSxGalbot \
- && python setup.py develop --all 
 
 # --- LLaVA v1.2.2.post1 ---
 WORKDIR /home
 RUN git clone  --branch v1.2.2.post1 https://github.com/haotian-liu/LLaVA.git
 
+# llava
 WORKDIR /home/LLaVA
-# Use modern editable install; no build isolation so it reuses your preinstalled torch/cuda stack
-RUN conda init \
- && exec bash \ 
- && conda activate TAMSxGalbot \
- && python -m pip install  -e . 
+RUN conda run -n TAMSxGalbot python -m pip install -e .
+
+RUN conda run -n TAMSxGalbot pip install transformers==4.31.0 
+
+# Ensure bash always sources conda and activates env
+RUN echo ". /opt/conda/etc/profile.d/conda.sh && conda activate TAMSxGalbot" >> /root/.bashrc
 
 
