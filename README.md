@@ -229,7 +229,7 @@ export DISABLE_ROS1_EOL_WARNINGS = 1
 ### 8. Export Key
 OPENAI_API_KEY reference in the **Additional Notes or Instructions** in submission form.
 
-### 9. venv path alter
+### 9. Alter venv path
 Change venv path under ai_module/src/dummy_vlm/launch/dummy_vlm.launchs
 ```bash
 <arg name="venv" value="/dataSSD/1sliu/miniconda3/envs/TAMSxGalbot/bin/python3" />

@@ -33,8 +33,12 @@ CMU-VLA-Challenge/ai_module/src/dummy_vlm/src/navid_ws/habitat-lab
 
 docker_bk/
 
+<<<<<<< HEAD
 pkgs/
 system/unity/logs/
 
 *_bk.*
 core
+=======
+eval_debug.py
+>>>>>>> 3abe0cf (Change base image for the docker file)
