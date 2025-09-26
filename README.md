@@ -100,7 +100,7 @@ docker run --gpus all -u root -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITS
 ```
 
 ```bash
-/* use sudo if necessary */  
+# use sudo if necessary   
 
 source /opt/ros/noetic/setup.bash   
 cd CMU-VLA-Challenge
