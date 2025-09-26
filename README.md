@@ -158,8 +158,8 @@ cd CMU-VLA-Challenge/ai_module
 catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ```
 
-The instruction in `eval_debug.py` need to be modified, as mentioned in A2.
-Besides, `image_id` in `eval_debug.py` need to be modified as the real `[$VLM_DOCKER_IMAGE_ID]` in your system.
+The instruction in `eval_debug.py` need to be modified, as mentioned in A.
+Besides, `image_id` in `eval_debug.py` need to be modified as the real `[$VLM_DOCKER_IMAGE_ID]` in your system. Finally, set `compose_dir` in `eval_debug.py` as the absolute path of the docker folder of the CMU-VLA-Challenge project in your system.
 
 ```bash
 exit
