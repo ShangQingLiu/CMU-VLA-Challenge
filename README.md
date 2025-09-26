@@ -8,12 +8,13 @@
 > **Note:** Use **Ubuntu 20.04 (Focal)** with **ROS Noetic**.      
 > **Requirement: RAM > 72GB**.  
 
-### Tips  -  You can set up the environment in either of the following two ways: A or B.
+### Tips  -  You can set up the environment in either of the following two ways: A or B or C.
 
-## A. Docker Version
-### 1. Download the source code in this repository
+## A. Docker Version (Full)
+### A1. Download the source code in this repository
 
-### 2. Open terminal #1   
+### A2. Open terminal #1   
+System docker container.
 ```bash
 docker pull haochenz11/ubuntu20_ros:cmu_vla_challenge_simulation
 xhost + 
@@ -24,11 +25,13 @@ newgrp docker
 docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
   -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
   -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
-  --network=host e4679c07c815
+  --network=host [$SYSTEM_DOCKER_IMAGE_ID]
 ```
 
 ```bash
-/* use sudo if necessary */  
+# use sudo if necessary 
+# sudo chown -R $(id -u):$(id -g) /home/$USER/CMU-VLA-Challenge/system/unity maybe useful
+# do not forget to put scenes into CMU-VLA-Challenge/system/unity/src/vehicle_simulator/mesh/unity */
 
 source /opt/ros/noetic/setup.bash   
 cd /home/$USER/CMU-VLA-Challenge/system/unity
@@ -37,12 +40,10 @@ chown -R docker:docker build/ devel/ .catkin_workspace
 chmod +rw build/ devel/ .catkin_workspace
 cd /home/$USER/CMU-VLA-Challenge
 ./launch_system.sh
-
-/* don't forget to put scenes into 
-CMU-VLA-Challenge/system/unity/src/vehicle_simulator/mesh/unity */
 ```
 
-### 2. Open terminal #2  
+### A3. Open terminal #2  
+VLM docker container.
 ```bash
 docker pull osmallfrogo/ubuntu20_ros:cmu_vla_challenge_simulation
 xhost + 
@@ -50,14 +51,14 @@ newgrp docker
 ```
 
 ```bash
-docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+docker run --gpus all -u root -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
   -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
   -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
-  --network=host 153cabb5e039
+  --network=host [$VLM_DOCKER_IMAGE_ID]
 ```
 
 ```bash
-/* use sudo if necessary */  
+# use sudo if necessary
 
 source /opt/ros/noetic/setup.bash   
 cd CMU-VLA-Challenge/ai_module
@@ -65,13 +66,12 @@ catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ```
 
 ```bash
-/* this is an example, and you need to change it. */
-/* publish Official Question Instruction Topic Message */
+# this is an example, and you need to change it.
 
 rostopic pub -r 1 /challenge_question std_msgs/String "data: 'How many red pillows are on the sofa?'"
 ```
 
-### 3. Model profiles and the key
+### A4. Model profiles and the key
 Download model profiles from Goole Drive and put them under `CMU-VLA-Challenge/ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/model_zoo`.
 We have attached the link in the submission form.
 Please organize the structure as described in `model_zoo_structure` in Goole Drive. 
@@ -85,17 +85,18 @@ Run `vim ~/.bashrc` in terminal #2 and put the `OPENAI_API_KEY` into it.
 We have also uploaded our `OPENAI_API_KEY` in Goole Drive.
 Finally, run `exec bash`.
 
-### 4. Open terminal #3 
+### A5. Open terminal #3 
+VLM docker container.
 ```bash
 xhost + 
 newgrp docker   
 ```
 
 ```bash
-docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+docker run --gpus all -u root -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
   -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
   -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
-  --network=host 153cabb5e039
+  --network=host [$VLM_DOCKER_IMAGE_ID]
 ```
 
 ```bash
@@ -109,23 +110,67 @@ cd CMU-VLA-Challenge
 
 
 
+## B. Docker Version (Lite)
+We put the python script `eval_debug.py` under the root directory of this repo.
+### B1. Download the source code in this repository
+
+### B2. Model profiles and the key
+Do those as mentioned in A3.
+
+### B3. Open terminal 
+System docker container.
+
+```bash
+docker pull haochenz11/ubuntu20_ros:cmu_vla_challenge_simulation
+xhost + 
+newgrp docker   
+ 
+docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
+  -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
+  --network=host [$SYSTEM_DOCKER_IMAGE_ID]
+ 
+# use sudo if necessary 
+# do not forget to put scenes into CMU-VLA-Challenge/system/unity/src/vehicle_simulator/mesh/unity
+
+source /opt/ros/noetic/setup.bash   
+cd /home/$USER/CMU-VLA-Challenge/system/unity
+catkin_make   
+```
+
+VLM docker container.
+
+```bash
+exit
+docker pull osmallfrogo/ubuntu20_ros:cmu_vla_challenge_simulation
+xhost + 
+newgrp docker   
+ 
+docker run --gpus all -u root -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
+  -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
+  --network=host [$VLM_DOCKER_IMAGE_ID]
+ 
+# use sudo if necessary 
+
+source /opt/ros/noetic/setup.bash   
+cd CMU-VLA-Challenge/ai_module
+catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+```
+
+The instruction in `eval_debug.py` need to be modified, as mentioned in A2.
+Besides, `image_id` in `eval_debug.py` need to be modified as the real `[$VLM_DOCKER_IMAGE_ID]` in your system.
+
+```bash
+exit
+python eval_debug.py  
+```
 
 
 
+## C. General Version
 
-
-
-
-
-
-
-
-
-
-
-## B. General Version
-
-### 1. Install Conda (skip if already installed).    
+### C1. Install Conda (skip if already installed).    
 
 ```bash
 wget -O /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -134,26 +179,26 @@ rm /tmp/miniconda.sh
 source "$HOME/miniconda/etc/profile.d/conda.sh"
 ```
 
-### 2. Clone the repository
+### C2. Clone the repository
 ```bash
 git clone https://github.com/ShangQingLiu/CMU-VLA-Challenge.git
 cd CMU-VLA-Challenge
 ```
 
-### 3. Create Conda Environment (TAMSxGalbot)
+### C3. Create Conda Environment (TAMSxGalbot)
 ```bash
 cd ai_module/
 conda env create -f environment.yml
 ```
 
-### 4. Create folder for external module build
+### C4. Create folder for external module build
 ```bash
 cd ..
 mkdir pkgs/
 cd pkgs
 ```
 
-### 5. Install External Modules
+### C5. Install External Modules
 ##### (a) Habitat 
 ```bash
 git clone --branch v0.1.7 git@github.com:facebookresearch/habitat-lab.git 
@@ -193,13 +238,13 @@ rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-### 6. Download Model and Alter Model PATH 
+### C6. Download Model and Alter Model PATH 
 Download model pth from Google Drive link in **Additional Notes or Instructions** in submission form.
 Place them under `ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/model_zoo/`
 Reference to `model_zoo_structure.docx` in the Google Drive 
 
 
-### 7. Build Environment (ROS)
+### C7. Build Environment (ROS)
 From project ROOT:
 ```bash
 source /opt/ros/noetic/setup.bash 
@@ -226,16 +271,16 @@ source CMU-VLA-Challenge/ai_module/devel/setup.bash
 export DISABLE_ROS1_EOL_WARNINGS = 1
 ```
 
-### 8. Export Key
+### C8. Export Key
 OPENAI_API_KEY reference in the **Additional Notes or Instructions** in submission form.
 
-### 9. Alter venv path
+### C9. Alter venv path
 Change venv path under ai_module/src/dummy_vlm/launch/dummy_vlm.launchs
 ```bash
 <arg name="venv" value="/dataSSD/1sliu/miniconda3/envs/TAMSxGalbot/bin/python3" />
 ```
 
-### 9. Runtime
+### C10. Runtime
 ##### Terminal 1 - System Up
 Back to Project ROOT
 ```bash

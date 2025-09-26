@@ -8,19 +8,25 @@ ENV NVIDIA_DRIVER_CAPABILITIES \
 
 ENV ROS_DISTRO noetic
 
+RUN conda run -n TAMSxGalbot pip install empy 
+RUN conda run -n TAMSxGalbot pip install catkin_pkg
+
 ########ROS########
 # setup timezone
-RUN echo 'Etc/UTC' > /etc/timezone && \
-    ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
-    apt-get update && \
-    apt-get install -q -y --no-install-recommends tzdata && \
-    rm -rf /var/lib/apt/lists/*
+# RUN echo 'Etc/UTC' > /etc/timezone && \
+#     ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+#     apt-get update && \
+#     apt-get install -q -y --no-install-recommends tzdata && \
+#     rm -rf /var/lib/apt/lists/*
 
 # install packages
 RUN apt-get update && apt-get install -q -y --no-install-recommends \
     dirmngr \
     gnupg2 \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
+
+RUN echo "export PATH=$PATH:/usr/bin/ffmpeg" >> ~/.bashrc
 
 # setup sources.list
 RUN echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros1-latest.list
