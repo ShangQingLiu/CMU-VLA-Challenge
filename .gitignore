@@ -40,5 +40,4 @@ system/unity/logs/
 *_bk.*
 core
 =======
-eval_debug.py
 >>>>>>> 3abe0cf (Change base image for the docker file)
