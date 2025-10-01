@@ -184,6 +184,7 @@ exit
 python eval_debug.py  
 ```
 
+* The output in the terminal will appear with a delay.
 
 
 ## C. General Version
