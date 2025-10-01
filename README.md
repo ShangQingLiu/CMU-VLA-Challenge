@@ -12,6 +12,8 @@
 
 ## A. Docker Version (Full)
 ### A1. Download the source code in this repository
+* `CMU-VLA-Challenge`
+* Do not forget to put scenes into `system/unity/src/vehicle_simulator/mesh/unity`.
 
 ### A2. Open terminal #1   
 System docker container.
@@ -31,7 +33,6 @@ docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
 ```bash
 # use sudo if necessary 
 # sudo chown -R $(id -u):$(id -g) /home/$USER/CMU-VLA-Challenge/system/unity maybe useful
-# do not forget to put scenes into CMU-VLA-Challenge/system/unity/src/vehicle_simulator/mesh/unity */
 
 source /opt/ros/noetic/setup.bash   
 cd /home/$USER/CMU-VLA-Challenge/system/unity
@@ -113,6 +114,8 @@ cd CMU-VLA-Challenge
 ## B. Docker Version (Lite)
 We put the python script `eval_debug.py` under the root directory of this repo.
 ### B1. Download the source code in this repository
+* `CMU-VLA-Challenge`
+* Do not forget to put scenes into `system/unity/src/vehicle_simulator/mesh/unity`.
 
 ### B2. Model profiles and the key
 Do those as mentioned in A3.
@@ -129,13 +132,25 @@ docker run --gpus all -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
   -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
   -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
   --network=host [$SYSTEM_DOCKER_IMAGE_ID]
- 
-# use sudo if necessary 
-# do not forget to put scenes into CMU-VLA-Challenge/system/unity/src/vehicle_simulator/mesh/unity
+
+echo "USER=$(id −un) UID=$(id −u) GID=$(id −g) GROUP=$(id −gn)"
+# example output: USER=docker UID=1000 GID=1000 GROUP=docker
+
+exit
+
+docker run --gpus all -u root -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -e XAUTHORITY=/tmp/.docker.xauth -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /etc/localtime:/etc/localtime:ro \
+  -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
+  --network=host [$SYSTEM_DOCKER_IMAGE_ID]
 
 source /opt/ros/noetic/setup.bash   
 cd /home/$USER/CMU-VLA-Challenge/system/unity
 catkin_make   
+
+UID_TGT=1000 # use the value in the example output
+GID_TGT=1000 # use the value in the example output
+TARGET="/home/$USER/CMU-VLA-Challenge" # use your real path
+chown -R ${UID_TGT}:${GID_TGT} "$TARGET"
 ```
 
 VLM docker container.
@@ -151,7 +166,6 @@ docker run --gpus all -u root -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITS
   -v /dev/input:/dev/input -v /dev/bus/usb:/dev/bus/usb:rw -v /home/$USER:/home/$USER:rw \
   --network=host [$VLM_DOCKER_IMAGE_ID]
  
-# use sudo if necessary 
 # pip install empy catkin_pkg ----- maybe useful
 
 source /opt/ros/noetic/setup.bash   
@@ -159,8 +173,11 @@ cd CMU-VLA-Challenge/ai_module
 catkin_make -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ```
 
-The instruction in `eval_debug.py` need to be modified, as mentioned in A.
-Besides, `image_id` in `eval_debug.py` need to be modified as the real `[$VLM_DOCKER_IMAGE_ID]` in your system. Finally, set `compose_dir` in `eval_debug.py` as the absolute path of the docker folder of the CMU-VLA-Challenge project in your system.
+* The instruction in `eval_debug.py` need to be modified, as mentioned in A.
+* `image_id` in `eval_debug.py` need to be modified as the real `[$VLM_DOCKER_IMAGE_ID]` in your system. 
+* Please set `compose_dir` in `eval_debug.py` as the absolute path of the docker folder of the CMU-VLA-Challenge project in your system.
+* Please make sure that the paths at line 28 and line 61 in `compose_gpu.yml` are consistent with those on your system.
+* Please set the `host` and `port` at line 154 in the `ai_module/src/dummy_vlm/src/navid_ws/NaVid-VLN-CE/navid_agent.py` file to the correct values. We have sent the correct values to you via e-mail.
 
 ```bash
 exit
