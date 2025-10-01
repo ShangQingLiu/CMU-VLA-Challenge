@@ -2,14 +2,19 @@ import argparse
 from habitat.datasets import make_dataset
 import sys
 
+
+
 from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-
-from VLN_CE.vlnce_baselines.config.default import get_config
-from navid_agent import evaluate_agent, VLM
+# from VLN_CE.vlnce_baselines.config.default import get_config
+# from navid_agent import evaluate_agent, VLM
+from navid_agent import VLM
 import rospy
+
+
+
 
 def main():
     parser = argparse.ArgumentParser()

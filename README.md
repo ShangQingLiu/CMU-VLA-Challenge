@@ -152,6 +152,7 @@ docker run --gpus all -u root -it --rm --privileged -e DISPLAY -e QT_X11_NO_MITS
   --network=host [$VLM_DOCKER_IMAGE_ID]
  
 # use sudo if necessary 
+# pip install empy catkin_pkg ----- maybe useful
 
 source /opt/ros/noetic/setup.bash   
 cd CMU-VLA-Challenge/ai_module
@@ -187,7 +188,7 @@ cd CMU-VLA-Challenge
 
 ### C3. Create Conda Environment (TAMSxGalbot)
 ```bash
-cd ai_module/
+cd docker/
 conda env create -f environment.yml
 ```
 

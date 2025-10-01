@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # --- modified PROC2: run a new container and execute launch.sh ---
     user = os.environ.get("USER", "user")
     display = os.environ.get("DISPLAY", ":0")
-    image_id = "015e33d1bd60"
+    image_id = "add8229d8548"
     
     cmd = (
     "source /opt/ros/noetic/setup.bash && "
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     cmd = (
         "source /opt/ros/noetic/setup.bash && "
         "rostopic pub -r 1 /challenge_question std_msgs/String "
-        "\"data: 'How many red pillows are on the sofa?'\""
+        "\"data: 'Go near the stool under the picture and stop at the small table farthest from the columns.'\""
     )
 
     proc3 = subprocess.Popen(
